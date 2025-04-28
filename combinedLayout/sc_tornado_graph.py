@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from ..colors import COLORS
+from combinedLayout.colors import COLORS
 
 def create_sc_tornado_graph(main_window):
     main_window.tornado_ax.barh(main_window.tornado_y, [0 for _ in range(main_window.round_state.num_players)], color='red', label='Decrease Impact')

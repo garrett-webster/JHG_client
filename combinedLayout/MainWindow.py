@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from functools import partial
 
 import numpy as np
@@ -10,15 +15,14 @@ from matplotlib.figure import Figure
 
 from combinedLayout.JhgPanel import JhgPanel
 
-
 from combinedLayout.SCHistoryGrid import SCHistoryGrid
 
-from .MainDocks import CornerContainer
-from .SCCausesGraph import SCCausesGraph
-from .ui_functions.SC_functions import *
-from .ui_functions.JHG_functions import *
+from combinedLayout.MainDocks import CornerContainer
+from combinedLayout.SCCausesGraph import SCCausesGraph
+from combinedLayout.ui_functions.SC_functions import *
+from combinedLayout.ui_functions.JHG_functions import *
 
-from .ui_functions.tornado_graph import update_tornado_graph
+from combinedLayout.tornado_graph import update_tornado_graph
 
 
 class MainWindow(QMainWindow):
@@ -28,7 +32,7 @@ class MainWindow(QMainWindow):
         # If you mess with it, you might break a lot of things.
         # It has been broken up into blocks below to try to mitigate that
 
-    #1# Block one: Sets up the round_state and client socket. Must be the first thing done
+        # 1# Block one: Sets up the round_state and client socket. Must be the first thing done
         self.tornado_ax = None
         self.tornado_canvas = None
         self.SC_cause_graph = SCCausesGraph(num_cycles)
@@ -37,9 +41,9 @@ class MainWindow(QMainWindow):
         self.round_state = RoundState(client_id, num_players, self.jhg_buttons)
         self.connection_manager = connection_manager
         self.num_cycles = num_cycles
-    #/1#
+        # /1#
 
-    #2# Block two: Creates the elements that will be passed to the server listener for dynamic updating. Must happen before the server listener is created
+        # 2# Block two: Creates the elements that will be passed to the server listener for dynamic updating. Must happen before the server listener is created
         self.setWindowTitle(f"Junior High Game: Player {int(self.round_state.client_id) + 1}")
 
         # Dynamically updated elements
@@ -73,11 +77,12 @@ class MainWindow(QMainWindow):
         self.round_counter_font.setPointSize(20)
         self.round_counter.setFont(self.round_counter_font)
         self.headerLayout.addWidget(self.round_counter)
-    #/2#
+        # /2#
 
-    #3# Block three: Sets up the server listener, which depends on blocks 1&2.
+        # 3# Block three: Sets up the server listener, which depends on blocks 1&2.
         # Server Listener setup
-        self.ServerListener = ServerListener(self, connection_manager, self.round_state, self.round_counter, self.token_label,
+        self.ServerListener = ServerListener(self, connection_manager, self.round_state, self.round_counter,
+                                             self.token_label,
                                              self.jhg_popularity_graph, tabs, self.utility_qlabels)
         self.ServerListener_thread = QThread()
         self.ServerListener.moveToThread(self.ServerListener_thread)
@@ -85,19 +90,19 @@ class MainWindow(QMainWindow):
         self.set_up_signals()
 
         self.ServerListener_thread.start()
-    #/3#
+        # /3#
 
-    #4# Block four: Lays out the client. Dependent on blocks 1&2
+        # 4# Block four: Lays out the client. Dependent on blocks 1&2
         self.JHG_panel = QWidget()
         self.JHG_panel.setMinimumWidth(400)
-        self.JHG_panel.setLayout( JhgPanel(self.round_state, connection_manager, self.token_label,
-                                           self.jhg_popularity_graph, self.jhg_network, self.jhg_buttons))
+        self.JHG_panel.setLayout(JhgPanel(self.round_state, connection_manager, self.token_label,
+                                          self.jhg_popularity_graph, self.jhg_network, self.jhg_buttons))
         self.JHG_panel.setObjectName("JHG_Panel")
-        self.JHG_panel.setProperty("min-height", 80 + 40*self.round_state.num_players)
+        self.JHG_panel.setProperty("min-height", 80 + 40 * self.round_state.num_players)
 
         self.SC_panel = QTabWidget()
         self.SC_panel.setObjectName("SC_Panel")
-        self.SC_panel.setProperty("min-height", 200 + 20*self.round_state.num_players)
+        self.SC_panel.setProperty("min-height", 200 + 20 * self.round_state.num_players)
         self.SC_panel.setLayout(QVBoxLayout())
 
         plots_panel = QTabWidget()
@@ -116,17 +121,17 @@ class MainWindow(QMainWindow):
 
         graphs_layout.addWidget(sc_graph_tabs)
 
-        self.sc_history_grid = SCHistoryGrid(self.round_state.num_players, self.round_state.client_id, "Voted for", self.SC_cause_graph)
+        self.sc_history_grid = SCHistoryGrid(self.round_state.num_players, self.round_state.client_id, "Voted for",
+                                             self.SC_cause_graph)
         self.SC_panel.addTab(self.sc_history_grid, "History")
         self.SC_panel.currentChanged.connect(self.SC_tab_changed)
 
         self.setWindowTitle("JHG: Round 1")
         self.setCentralWidget(CornerContainer(self.JHG_panel, plots_panel, self.SC_panel, sc_graph_tabs))
-    #/4#
 
+    # /4#
 
-### --- Setting up pyqt signals --- ###
-
+    ### --- Setting up pyqt signals --- ###
 
     def set_up_signals(self):
         # pyqt signal hook-ups
@@ -150,7 +155,8 @@ class MainWindow(QMainWindow):
         if not is_last_cycle:
             self.SC_voting_grid.submit_button.setText("Submit")
 
-    def update_sc_utilities_labels(self, round_num, new_utilities, winning_vote, last_round_votes, last_round_utilities):
+    def update_sc_utilities_labels(self, round_num, new_utilities, winning_vote, last_round_votes,
+                                   last_round_utilities):
         update_sc_utilities_labels(self, round_num, new_utilities, winning_vote, last_round_votes, last_round_utilities)
 
     def update_tornado_graph(self, tornado_ax, positive_vote_effects, negative_vote_effects):

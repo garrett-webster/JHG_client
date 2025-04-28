@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QHBoxLayout, QLabel, QComboBox
 
-from .SCGrid import SCGrid
-from .ui_functions.SC_functions import get_winning_vote
+from combinedLayout.SCGrid import SCGrid
+from combinedLayout.ui_functions.SC_functions import get_winning_vote
 
 
 class SCHistoryGrid(SCGrid):

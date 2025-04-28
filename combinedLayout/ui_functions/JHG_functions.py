@@ -3,8 +3,8 @@ from PyQt6.QtCore import QPoint
 from PyQt6.QtWidgets import QToolTip
 from PyQt6.QtGui import QCursor
 
-from .jhg_network_graph import update_jhg_network_graph
-from ..colors import COLORS
+from combinedLayout.ui_functions.jhg_network_graph import update_jhg_network_graph
+from combinedLayout.colors import COLORS
 
 
 # Custom ScatterPlotItem that supports tooltips
@@ -19,7 +19,8 @@ class HoverScatter(pg.ScatterPlotItem):
             QToolTip.showText(QCursor.pos(), "")
             return
         points = self.pointsAt(event.pos())
-        if points:
+        print(type(points))
+        if points.size > 0:
             point = points[0]
             cursor_pos = QCursor.pos()
 

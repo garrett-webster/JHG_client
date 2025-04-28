@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtGui import QDrag
-from PyQt6.QtWidgets import QLabel, QWidget, QSizePolicy, QVBoxLayout, QGridLayout, QPushButton, QSplitter, QFrame
+from PyQt6.QtWidgets import QLabel, QWidget, QSizePolicy, QVBoxLayout, QSplitter, QFrame
 
 
 # Draggable panel widget

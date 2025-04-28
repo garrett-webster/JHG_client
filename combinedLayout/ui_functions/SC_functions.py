@@ -1,8 +1,6 @@
-import time
-
 from PyQt6.QtWidgets import QVBoxLayout, QTabWidget
 
-from .tornado_graph import create_tornado_graph
+from combinedLayout.tornado_graph import create_tornado_graph
 from combinedLayout.SCVotingGrid import SCVotingGrid
 
 

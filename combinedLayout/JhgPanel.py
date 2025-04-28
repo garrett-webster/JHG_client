@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout
-from .JhgVotingPanel import JhgVotingPanel
+from combinedLayout.JhgVotingPanel import JhgVotingPanel
 
 
 class JhgPanel(QHBoxLayout):

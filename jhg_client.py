@@ -1,7 +1,6 @@
-import sys
 import os
-
-sys.path.append(os.path.dirname(__file__))
+import sys
+import pyqtgraph
 
 from PyQt6.QtWidgets import QApplication
 
@@ -10,7 +9,16 @@ from combinedLayout.MainWindow import MainWindow
 
 
 def load_stylesheet(path):
-    with open(path, "r") as file:
+    if getattr(sys, 'frozen', False):
+        # Running as a bundled exe
+        base_path = sys._MEIPASS
+    else:
+        # Running as a normal .py script
+        base_path = os.path.abspath(".")
+
+    full_path = os.path.join(base_path, path)
+
+    with open(full_path, "r") as file:
         return file.read()
 
 
